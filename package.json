@@ -1,0 +1,30 @@
+{
+  "name": "dejizo-json-wrapper",
+  "version": "1.0.0",
+  "description": "A JSON wrapper for the Dejizo web service.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harumaro/dejizo-api-json-wrapper.git"
+  },
+  "keywords": [
+    "json",
+    "dejizo",
+    "api",
+    "japanese",
+    "dictionary"
+  ],
+  "author": "Raffaele Procentese <deadpikasso@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Harumaro/dejizo-api-json-wrapper/issues"
+  },
+  "homepage": "https://github.com/Harumaro/dejizo-api-json-wrapper#readme",
+  "dependencies": {
+    "request-promise": "^3.0.0",
+    "xml2js": "^0.4.16"
+  }
+}
