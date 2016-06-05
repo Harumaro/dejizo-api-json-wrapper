@@ -23,18 +23,26 @@ function readMultipleLines () {
         } else {
           Dejizo.parse(word, {match: 'STARTWITH', page: answer || 1}, function (err, matches) {
             if (!err) {
-              for (i in matches.results) {
-                var match = matches.results[i];
-                match.details(match.itemId, function (err, trans) {
-                  if (!err) {
-                    console.log('>Total matches: ' + matches.totalResults);
-                    console.log('>Total pages: ' + matches.totalPages);
-                    console.log('>Word: ' + match.matchedWord);
-                    console.log('>Reading: ' + trans.reading + ' Meanings: ' + trans.meanings.join(', '));
-                    readMultipleLines();
-                  }
-                });
+              if (matches.results.length > 0) {
+                for (i in matches.results) {
+                  var match = matches.results[i];
+                  match.details(match.itemId, function (err, trans) {
+                    if (!err) {
+                      console.log('>Total matches: ' + matches.totalResults);
+                      console.log('>Total pages: ' + matches.totalPages);
+                      console.log('>Word: ' + match.matchedWord);
+                      console.log('>Reading: ' + trans.reading + ' Meanings: ' + trans.meanings.join(', '));
+                      readMultipleLines();
+                    }
+                  });
+                }
+              } else {
+                console.log('>Total matches: ' + matches.totalResults);
+                readMultipleLines();
               }
+            } else {
+              console.log('ERROR> ' + err);
+              readMultipleLines();
             }
           });
         }
@@ -48,4 +56,5 @@ rl.on('close', () => {
 });
 
 readMultipleLines();
+
 ```
