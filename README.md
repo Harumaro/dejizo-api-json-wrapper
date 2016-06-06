@@ -1,7 +1,7 @@
 # dejizo-api-json-wrapper
-A JSON wrapper for the Dejizo web service.
+### A JSON wrapper for the Dejizo web service. / デ辞蔵ウェブサービスのJSONラッパー。
 
-Node.js sample usage
+Node.js sample usage / NodeJSでの使い方
 ```
 var readline = require('readline');
 var Dejizo = require('./lib/dejizo');
