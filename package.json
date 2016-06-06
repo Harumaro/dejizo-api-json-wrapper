@@ -2,7 +2,7 @@
   "name": "dejizo-json-wrapper",
   "version": "1.0.0",
   "description": "A JSON wrapper for the Dejizo web service.",
-  "main": "index.js",
+  "main": "./lib/dejizo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

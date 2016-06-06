@@ -21,29 +21,31 @@ function readMultipleLines () {
         if (answer == 'quit') {
           rl.close();
         } else {
-          Dejizo.parse(word, {match: 'STARTWITH', page: answer || 1}, function (err, matches) {
-            if (!err) {
-              if (matches.results.length > 0) {
-                for (i in matches.results) {
-                  var match = matches.results[i];
-                  match.details(match.itemId, function (err, trans) {
-                    if (!err) {
-                      console.log('>Total matches: ' + matches.totalResults);
-                      console.log('>Total pages: ' + matches.totalPages);
-                      console.log('>Word: ' + match.matchedWord);
-                      console.log('>Reading: ' + trans.reading + ' Meanings: ' + trans.meanings.join(', '));
-                      readMultipleLines();
-                    }
-                  });
-                }
-              } else {
-                console.log('>Total matches: ' + matches.totalResults);
-                readMultipleLines();
+          Dejizo.parse(word, {match: 'STARTWITH', page: answer || 1}).then(function (matches) {
+            if (matches.results.length > 0) {
+              var details = [];
+              for (i in matches.results) {
+                details.push(matches.results[i].details);
               }
+              Promise.all(details).then(function (match) {
+                for (i in match) {
+                  console.log('>Total matches: ' + matches.totalResults);
+                  console.log('>Total pages: ' + matches.totalPages);
+                  console.log('>Word: ' + match[i].matchedWord);
+                  console.log('>Reading: ' + match[i].details.reading + ' Meanings: ' + match[i].details.meanings.join(', '));
+                }
+                readMultipleLines();
+              }).catch(function (err) {
+                readMultipleLines();
+                console.log('ERROR> ' + err);
+              });
             } else {
-              console.log('ERROR> ' + err);
               readMultipleLines();
+              console.log('>Total matches: ' + matches.totalResults);
             }
+          }).catch(function (err) {
+            readMultipleLines();
+            console.log('ERROR> ' + err);
           });
         }
       });
