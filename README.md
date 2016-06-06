@@ -3,61 +3,79 @@
 
 Node.js sample usage / NodeJSでの使い方
 ```
-var readline = require('readline');
 var Dejizo = require('./lib/dejizo');
+var readline = require('readline');
 
-const rl = readline.createInterface({
+var rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-function readMultipleLines () {
-  rl.question('Type word: ', (answer) => {
-    if (answer == 'quit') {
-      rl.close();
-    } else {
-      var word = answer;
-      rl.question('Type page: (1) ', (answer) => {
-        if (answer == 'quit') {
-          rl.close();
-        } else {
-          Dejizo.parse(word, {dict: 'EdictJE', page: answer || 1}).then(function (matches) {
-            if (matches.results.length > 0) {
-              var details = [];
-              for (i in matches.results) {
-                details.push(matches.results[i].details);
-              }
-              Promise.all(details).then(function (match) {
-                for (i in match) {
-                  console.log('\n>Total matches: ' + matches.totalResults);
-                  console.log('>Total pages: ' + matches.totalPages);
-                  console.log('>Word: ' + match[i].matchedWord);
-                  console.log('>Reading: ' + match[i].details.reading)
-                  console.log('>Meaning: ' + match[i].details.meaning);
-                }
-                readMultipleLines();
-              }).catch(function (err) {
-                console.log('ERROR> ' + err);
-                readMultipleLines();
-              });
-            } else {
-              console.log('>Total matches: ' + matches.totalResults);
-              readMultipleLines();
+var dict = '';
+var word = '';
+var page = '';
+
+var readState = 0;
+var questions = [
+  'Dictionary: [1] jp [2] en> (1) ',
+  'Type word> ',
+  'Type page (1)> ',
+];
+
+console.log('Type quit at any time to exit.');
+rl.setPrompt(questions[readState]);
+rl.prompt();
+
+rl.on('line', (line) => {
+  line = line.trim();
+  if (line === 'quit') {
+    rl.close();
+  }
+  switch (readState %= 3) {
+    case 0:
+      dict = (!line || line == 1) && 'EdictJE' || 'EJdict';
+      rl.setPrompt(questions[++readState]);
+      rl.prompt();
+      break;
+    case 1:
+      word = line;
+      rl.setPrompt(questions[++readState]);
+      rl.prompt();
+      break;
+    case 2:
+      rl.setPrompt(questions[++readState%3]);
+      Dejizo.parse(word, {dict: dict, page: line || 1}).then(function (matches) {
+        console.log('\n>Total matches: ' + matches.totalResults);
+        console.log('>Total pages: ' + matches.totalPages);
+        if (matches.results.length > 0) {
+          var details = [];
+          for (i in matches.results) {
+            details.push(matches.results[i].details);
+          }
+          Promise.all(details).then(function (match) {
+            for (i in match) {
+              console.log('>Word: ' + match[i].matchedWord);
+              console.log('>Reading: ' + match[i].details.reading);
+              console.log('>Meaning: ' + match[i].details.meaning + '\n');
             }
+            rl.prompt();
           }).catch(function (err) {
             console.log('ERROR> ' + err);
-            readMultipleLines();
+            rl.prompt();
           });
+        } else {
+          rl.prompt();
         }
+      }).catch(function (err) {
+        console.log('ERROR> ' + err);
+        rl.prompt();
       });
-    }
-  });
-}
+      break;
+  }
+});
 
 rl.on('close', () => {
   process.exit(0);
 });
-
-readMultipleLines();
 
 ```
