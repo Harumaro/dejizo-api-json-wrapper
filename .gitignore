@@ -1,2 +1,5 @@
 node_modules
+web/*
+!web/module.js
 index.js
+index.htm
