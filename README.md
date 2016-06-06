@@ -17,11 +17,11 @@ function readMultipleLines () {
       rl.close();
     } else {
       var word = answer;
-      rl.question('Type page: ', (answer) => {
+      rl.question('Type page: (1) ', (answer) => {
         if (answer == 'quit') {
           rl.close();
         } else {
-          Dejizo.parse(word, {match: 'STARTWITH', page: answer || 1}).then(function (matches) {
+          Dejizo.parse(word, {dict: 'EdictJE', page: answer || 1}).then(function (matches) {
             if (matches.results.length > 0) {
               var details = [];
               for (i in matches.results) {
@@ -29,23 +29,24 @@ function readMultipleLines () {
               }
               Promise.all(details).then(function (match) {
                 for (i in match) {
-                  console.log('>Total matches: ' + matches.totalResults);
+                  console.log('\n>Total matches: ' + matches.totalResults);
                   console.log('>Total pages: ' + matches.totalPages);
                   console.log('>Word: ' + match[i].matchedWord);
-                  console.log('>Reading: ' + match[i].details.reading + ' Meanings: ' + match[i].details.meanings.join(', '));
+                  console.log('>Reading: ' + match[i].details.reading)
+                  console.log('>Meaning: ' + match[i].details.meaning);
                 }
                 readMultipleLines();
               }).catch(function (err) {
-                readMultipleLines();
                 console.log('ERROR> ' + err);
+                readMultipleLines();
               });
             } else {
-              readMultipleLines();
               console.log('>Total matches: ' + matches.totalResults);
+              readMultipleLines();
             }
           }).catch(function (err) {
-            readMultipleLines();
             console.log('ERROR> ' + err);
+            readMultipleLines();
           });
         }
       });
