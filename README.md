@@ -43,26 +43,17 @@ rl.on('line', (line) => {
       rl.prompt();
       break;
     case 2:
-      rl.setPrompt(questions[++readState%3]);
+      rl.setPrompt(questions[++readState % 3]);
       Dejizo.parse(word, {dict: dict, page: line || 1}).then(function (matches) {
         console.log('\n>Total matches: ' + matches.totalResults);
         console.log('>Total pages: ' + matches.totalPages);
         if (matches.results.length > 0) {
-          var details = [];
           for (i in matches.results) {
-            details.push(matches.results[i].details);
+            console.log('>Word: ' + matches.results[i].matchedWord);
+            console.log('>Reading: ' + matches.results[i].details.reading);
+            console.log('>Meaning: ' + matches.results[i].details.meaning + '\n');
           }
-          Promise.all(details).then(function (match) {
-            for (i in match) {
-              console.log('>Word: ' + match[i].matchedWord);
-              console.log('>Reading: ' + match[i].details.reading);
-              console.log('>Meaning: ' + match[i].details.meaning + '\n');
-            }
-            rl.prompt();
-          }).catch(function (err) {
-            console.log('ERROR> ' + err);
-            rl.prompt();
-          });
+          rl.prompt();
         } else {
           rl.prompt();
         }
