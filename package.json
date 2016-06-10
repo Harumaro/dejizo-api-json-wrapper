@@ -2,14 +2,16 @@
   "name": "dejizo-json-wrapper",
   "version": "1.0.0",
   "description": "A JSON wrapper for the Dejizo web service.",
-  "main": "./lib/dejizo.js",
+  "main": "./dist/lib/dejizo.js",
   "scripts": {
+    "build": "babel lib -d dist/lib",
+    "start": "babel lib -d dist/lib & node index-clean.js",
     "build-web": "browserify web/module.js -i cls-bluebird | uglifyjs -cm > web/bundle.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Harumaro/dejizo-api-json-wrapper.git"
+    "url": "git+https://github.com/Harumaro/dejizo-api-json-wrapper/tree/es7-with-async.git"
   },
   "keywords": [
     "json",
@@ -25,10 +27,14 @@
   },
   "homepage": "https://github.com/Harumaro/dejizo-api-json-wrapper#readme",
   "dependencies": {
+    "q": "^1.4.1",
     "request-promise": "^3.0.0",
     "xml2js": "^0.4.16"
   },
-   "devDependencies": {
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
     "browserify": "^6.2.0",
     "uglify-js": "~2.4.15",
     "watchify": "^2.1.1"

@@ -1,5 +1,8 @@
 node_modules
+npm-debug.log
+
 web/*
 !web/module.js
-index.js
-index.htm
+
+*.js
+*.htm
