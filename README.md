@@ -3,7 +3,7 @@
 
 Node.js sample usage / NodeJSでの使い方
 ```
-var Dejizo = require('./lib/dejizo');
+var Dejizo = require('./dist/lib/dejizo');
 var readline = require('readline');
 
 var rl = readline.createInterface({
@@ -44,7 +44,10 @@ rl.on('line', (line) => {
       break;
     case 2:
       rl.setPrompt(questions[++readState % 3]);
-      Dejizo.parse(word, {dict: dict, page: line || 1}).then(function (matches) {
+      try {
+        var matches = Dejizo.parse(word, {dict: dict, page: line || 1});
+        console.log(matches);
+
         console.log('\n>Total matches: ' + matches.totalResults);
         console.log('>Total pages: ' + matches.totalPages);
         if (matches.results.length > 0) {
@@ -57,10 +60,10 @@ rl.on('line', (line) => {
         } else {
           rl.prompt();
         }
-      }).catch(function (err) {
+      } catch(err) {
         console.log('ERROR> ' + err);
         rl.prompt();
-      });
+      }
       break;
   }
 });
