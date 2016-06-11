@@ -1,2 +1,3 @@
-var Dejizo = require('../dist/lib/dejizo');
+var Dejizo = require('../lib/dejizo');
+
 global.window.Dejizo = Dejizo;

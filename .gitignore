@@ -1,8 +1,5 @@
 node_modules
 npm-debug.log
 
-web/*
-!web/module.js
-
-*.js
-*.htm
+/*.js
+/*.htm

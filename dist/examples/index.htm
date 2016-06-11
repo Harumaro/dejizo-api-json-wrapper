@@ -1,0 +1,39 @@
+<form>
+  <select name="dict">
+    <option value="EdictJE">JP -> EN</option>
+    <option value="EJdict">EN -> JP</option>
+    </select>
+  <input name="word" placeholder="Word" title="Word" type="text" value="" />
+  <input name="page" placeholder="Page" title="Page" type="text" value="" />
+  <input type="submit" value="Search" />
+  <div id="results"></div>
+</form>
+<script src="web/bundle.min.js"></script>
+<script>
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  var dictionary = document.querySelector('[name=dict]').value;
+  var page = document.querySelector('[name=page]').value;
+  var word = document.querySelector('[name=word]').value;
+  var $results = document.querySelector('#results');
+
+  $results.innerHTML = '';
+
+  Dejizo.parse(word, {dict: dictionary, page: page}).then(function (matches) {
+    $results.innerHTML += '<p>Total matches: ' + matches.totalResults + '</p>';
+    $results.innerHTML += '<p>Total pages: ' + matches.totalResults + '</p>';
+    if (matches.results.length > 0) {
+      for (i in matches.results) {
+        $results.innerHTML += '<p>Word: ' + matches.results[i].matchedWord + '</p>';
+        $results.innerHTML += '<p>Reading: ' + matches.results[i].details.reading + '</p>';
+        $results.innerHTML += '<p>Meaning: ' + matches.results[i].details.meaning + '</p>';
+      }
+    }
+  }).catch(function (err) {
+    console.log('ERROR> ' + err);
+  });
+});
+
+</script>
