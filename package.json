@@ -6,9 +6,8 @@
   "scripts": {
     "start": "node dist/examples/run.js",
     "serve": "node dist/examples/server.js",
-    "build": "babel lib -d dist/lib",    
-    "build-web-broken": "browserify web/module.js -i cls-bluebird -t [ babelify --plugins [ transform-es2015-modules-commonjs transform-async-to-generator ] ] | uglifyjs -cm > web/bundle.min.js",
-    "build-web": "browserify web/module.js -i cls-bluebird -t [ babelify --plugins [ transform-es2015-modules-commonjs transform-async-to-generator ] ] > web/bundle.min.js",
+    "build": "babel lib -d dist/lib",
+    "build-web": "browserify web/js/app.js -i cls-bluebird -t [ babelify --plugins [ transform-es2015-modules-commonjs ] --presets [ babel-preset-react ] ] | uglifyjs -cm > web/bundle.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,6 +29,8 @@
   "homepage": "https://github.com/Harumaro/dejizo-api-json-wrapper#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "flux": "^2.1.1",
+    "react": "^15.1.0",
     "request-promise": "^3.0.0",
     "xml2js": "^0.4.16"
   },
@@ -37,8 +38,10 @@
     "babel-core": "^6.9.1",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
+    "babel-preset-react": "^6.5.0",
     "babelify": "^7.3.0",
     "browserify": "^6.2.0",
+    "react-dom": "^15.1.0",
     "uglify-js": "~2.4.15",
     "watchify": "^2.1.1"
   }
